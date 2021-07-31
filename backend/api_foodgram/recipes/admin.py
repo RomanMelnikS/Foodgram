@@ -1,3 +1,45 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
-# Register your models here.
+
+from .models import Recipe, Tag, Ingredients, Follow, Favorite
+
+
+@admin.register(Recipe)
+class RecipeAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'name', 'text', 'author', 'image_tag',
+        'image', 'cooking_time'
+    )
+    readonly_fields = ('image_tag',)
+    search_fields = ('ingredients',)
+    empty_value_display = '-пусто-'
+
+    def image_tag(self, recipe):
+        if recipe.image:
+            return format_html(
+                '<img src="{0}" style="max-width: 100%"/>',
+                recipe.image.url
+            )
+    image_tag.short_description = 'Превью'
+
+
+@admin.register(Ingredients)
+class IndredientsAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'title', 'quantity', 'dimension')
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'name', 'color', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ('user', 'author',)
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe',)
