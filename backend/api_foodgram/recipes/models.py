@@ -4,6 +4,7 @@ from users.models import CustomUser
 
 
 class Recipe(models.Model):
+
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
@@ -27,11 +28,13 @@ class Recipe(models.Model):
     )
     ingredients = models.ManyToManyField(
         'Ingredients',
+        through='RecipeIngredients',
+        related_name='ingredients',
         verbose_name='Ингредиенты',
         blank=True
     )
-    tag = models.ManyToManyField(
-        'Tag',
+    tags = models.ManyToManyField(
+        'Tags',
         related_name='tags',
         verbose_name='Тэг',
         blank=True
@@ -54,40 +57,58 @@ class Recipe(models.Model):
 
 class Ingredients(models.Model):
 
-    class Ingredient(models.Choices):
-        (
-            ('title', 'title'),
-        )
-
-    title = models.CharField(
-        choices=Ingredient.choices,
+    name = models.CharField(
         max_length=200,
         verbose_name='Название ингредиента',
         null=False
     )
-    quantity = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(1, 'Не меньше 1 ед'),
-        ],
-        verbose_name='Количество ингредиентов',
-        null=True
-    )
-    dimension = models.CharField(
+    measurement_unit = models.CharField(
         max_length=200,
         verbose_name='Единица измерения',
         null=False
     )
 
     def __str__(self):
-        return (self.title)
+        return (self.name)
 
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
 
-class Tag(models.Model):
-    name = models.TextField(
+class RecipeIngredients(models.Model):
+
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name='Рецепт',
+    )
+
+    ingredients = models.ForeignKey(
+        Ingredients,
+        on_delete=models.CASCADE,
+        verbose_name='Ингредиент',
+    )
+
+    amount = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(1, 'Не меньше 1 ед'),
+        ],
+        verbose_name='Количество ингредиентов',
+        null=True
+    )
+
+    def __str__(self):
+        return (self.ingredients.name)
+
+    class Meta:
+        verbose_name = 'Ингредиент рецепта'
+        verbose_name_plural = 'Ингредиенты рецепта'
+
+
+class Tags(models.Model):
+
+    name = models.CharField(
         max_length=200,
         verbose_name='Название тэга',
         null=False

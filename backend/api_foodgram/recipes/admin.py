@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 
-from .models import Recipe, Tag, Ingredients, Follow, Favorite
+from .models import (
+    Recipe, RecipeIngredients, Tags, Ingredients,
+    Follow, Favorite
+    )
 
 
 @admin.register(Recipe)
@@ -26,10 +29,15 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredients)
 class IndredientsAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'title', 'quantity', 'dimension')
+    list_display = ('pk', 'name', 'measurement_unit')
 
 
-@admin.register(Tag)
+@admin.register(RecipeIngredients)
+class RecipeIndredientsAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'recipe', 'ingredients', 'amount')
+
+
+@admin.register(Tags)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'color', 'slug')
     prepopulated_fields = {'slug': ('name',)}
