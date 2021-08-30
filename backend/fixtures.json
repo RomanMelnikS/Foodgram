@@ -17534,5 +17534,23 @@
             "name": "ячневая крупа",
             "measurement_unit": "г"
         }
+    },
+    {
+        "model": "users.customuser",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$01fjDfxhKYx7kTlGd3MecK$eilR8EKwM6TV3iDI55cVtNT73+1jyyaiCQj0obfZOy8=",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "Roman",
+            "date_joined": "2021-08-25T13:36:14.248Z",
+            "first_name": "",
+            "last_name": "",
+            "email": "ad@ad.ru",
+            "is_staff": true,
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
     }
 ]

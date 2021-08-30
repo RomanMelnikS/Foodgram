@@ -1,13 +1,14 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
+
 from users.models import CustomUser
 
 
 class Recipe(models.Model):
-
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
+        related_name='author',
         verbose_name='Автор рецепта',
         null=False
     )
@@ -46,17 +47,22 @@ class Recipe(models.Model):
         verbose_name='Время приготовления',
         null=False
     )
+    pub_date = models.DateTimeField(
+        verbose_name='Дата публикации',
+        auto_now_add=True,
+        db_index=True
+    )
 
     def __str__(self):
         return (self.name)
 
     class Meta:
+        ordering = ('-pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
 
 class Ingredients(models.Model):
-
     name = models.CharField(
         max_length=200,
         verbose_name='Название ингредиента',
@@ -77,7 +83,6 @@ class Ingredients(models.Model):
 
 
 class RecipeIngredients(models.Model):
-
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -107,7 +112,6 @@ class RecipeIngredients(models.Model):
 
 
 class Tags(models.Model):
-
     name = models.CharField(
         max_length=200,
         verbose_name='Название тэга',
@@ -134,42 +138,19 @@ class Tags(models.Model):
         verbose_name_plural = 'Тэги'
 
 
-class Follow(models.Model):
-    user = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name='follower',
-        verbose_name='Follower'
-    )
-    author = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name='following',
-        verbose_name='Following',
-        null=True
-    )
-
-    def __str__(self):
-        return ('Подписки')
-
-    class Meta:
-        verbose_name = 'Подписки'
-        verbose_name_plural = 'Подписки'
-
-
 class Favorite(models.Model):
-    user = models.ForeignKey(
+    favorite_user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         related_name='user',
         verbose_name='Пользователь',
         null=True
     )
-    recipe = models.ForeignKey(
+    favorite_recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='favorites',
-        verbose_name='Избранное',
+        related_name='favorite_recipe',
+        verbose_name='Рецепт',
         null=True
     )
 
@@ -179,3 +160,27 @@ class Favorite(models.Model):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
+
+
+class ShoppingCart(models.Model):
+    shopping_cart_user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='shopping_cart_user',
+        verbose_name='Пользователь',
+        null=True
+    )
+    shopping_cart_recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='shopping_cart_recipe',
+        verbose_name='Рецепт',
+        null=True
+    )
+
+    def __str__(self):
+        return ('Список покупок')
+
+    class Meta:
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Список покупок'

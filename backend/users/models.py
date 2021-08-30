@@ -1,16 +1,8 @@
-from django.db import models
-import textwrap as tw
-
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class CustomUser(AbstractUser):
-
-    class Role(models.TextChoices):
-        GUEST = 'guest', 'guest'
-        AUTH_USER = 'auth_user', 'auth_user'
-        ADMIN = 'admin', 'admin'
-
     first_name = models.CharField(
         max_length=150,
         verbose_name='Имя',
@@ -29,26 +21,43 @@ class CustomUser(AbstractUser):
         help_text='Адрес вашей эл.почты',
         unique=True
     )
-    role = models.CharField(
-        choices=Role.choices,
-        max_length=50,
-        verbose_name='Роль пользователя',
-        default=Role.GUEST
-    )
 
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    def set_password(self, password):
-        return super().set_password(password)
+    # def set_password(self, password):
+    #     return super().set_password(password)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return tw.shorten(self.email, width=15, placeholder='...')
+        return self.email
 
     class Meta:
         ordering = ('id',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Follower'
+    )
+    author = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name='Following',
+        null=True
+    )
+
+    def __str__(self):
+        return ('Подписки')
+
+    class Meta:
+        verbose_name = 'Подписки'
+        verbose_name_plural = 'Подписки'

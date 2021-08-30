@@ -1,18 +1,20 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-
-from .models import (
-    Recipe, RecipeIngredients, Tags, Ingredients,
-    Follow, Favorite
-    )
+from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
+                            ShoppingCart, Tags)
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
-        'pk', 'name', 'text', 'author', 'image_tag',
-        'image', 'cooking_time'
+        'pk',
+        'name',
+        'text',
+        'author',
+        'image_tag',
+        'image',
+        'cooking_time'
     )
     readonly_fields = ('image_tag',)
     search_fields = ('ingredients',)
@@ -29,25 +31,44 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredients)
 class IndredientsAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'measurement_unit')
+    list_display = (
+        'pk',
+        'name',
+        'measurement_unit'
+    )
 
 
 @admin.register(RecipeIngredients)
 class RecipeIndredientsAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'recipe', 'ingredients', 'amount')
+    list_display = (
+        'pk',
+        'recipe',
+        'ingredients',
+        'amount'
+    )
 
 
 @admin.register(Tags)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'color', 'slug')
-    prepopulated_fields = {'slug': ('name',)}
-
-
-@admin.register(Follow)
-class FollowAdmin(admin.ModelAdmin):
-    list_display = ('user', 'author',)
+    list_display = (
+        'pk',
+        'name',
+        'color',
+        'slug'
+    )
 
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ('user', 'recipe',)
+    list_display = (
+        'favorite_user',
+        'favorite_recipe'
+    )
+
+
+@admin.register(ShoppingCart)
+class ShoppingCartAdmin(admin.ModelAdmin):
+    list_display = (
+        'shopping_cart_user',
+        'shopping_cart_recipe'
+    )
