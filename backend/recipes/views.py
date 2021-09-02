@@ -154,17 +154,22 @@ class RecipeViewSet(viewsets.ModelViewSet):
             shopping_cart_user=user
         )
         shopping_cart = {}
-        total_amount = 0
         for recipe in shopping_cart_recipes:
             for ingredient in recipe.shopping_cart_recipe.ingredients.all():
                 ing = RecipeIngredients.objects.get(
                     ingredients=ingredient,
                     recipe=recipe.shopping_cart_recipe
                 )
-                total_amount += ing.amount
-                shopping_cart[ingredient.name] = (
-                    str(total_amount), ingredient.measurement_unit
-                )
+                total_amount = ing.amount
+                if ingredient.name not in shopping_cart:
+                    shopping_cart[ingredient.name] = (
+                        str(total_amount), ingredient.measurement_unit
+                    )
+                else:
+                    total_amount += ing.amount
+                    shopping_cart[ingredient.name] = (
+                        str(total_amount), ingredient.measurement_unit
+                    )
         shop_list = ';\n'.join(
             [
                 ' - '.join(

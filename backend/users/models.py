@@ -25,11 +25,11 @@ class CustomUser(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    # def set_password(self, password):
-    #     return super().set_password(password)
+    def set_password(self, password):
+        return super().set_password(password)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     def __str__(self):
         return self.email
