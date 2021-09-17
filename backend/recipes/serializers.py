@@ -1,10 +1,20 @@
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
-
 from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
                             ShoppingCart, Tags)
+from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from users.serializers import SmallRecipeSerializer, UsersSerializer
+
+RECIPES_ERROR_MESSAGES = {
+    'cooking_time':
+        'Время приготовления не может быть отрицательным.',
+    'ingredients_is_none':
+        'Вы не добавили ингердиенты.',
+    'ingredients_not_unique':
+        'Вы добавили одинаковые ингердиенты, удалите их.',
+    'ingredients_amount_not_positive':
+        'Количество ингредиента не может быть отрицательным.'
+}
 
 
 class IngredientsSerializer(serializers.ModelSerializer):
@@ -127,15 +137,27 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
+        cooking_time = self.initial_data.get('cooking_time')
+        if int(cooking_time) <= 0:
+            raise serializers.ValidationError(
+                RECIPES_ERROR_MESSAGES['cooking_time']
+            )
         if len(ingredients) == 0:
             raise serializers.ValidationError(
-                {'ingredients':
-                    'Список ингридиентов не получен.'}
+                RECIPES_ERROR_MESSAGES['ingredients_is_none']
+            )
+        if len(ingredients) != len(list(
+                {
+                    ing['id']: ing
+                    for ing in ingredients
+                }.values())):
+            raise serializers.ValidationError(
+                RECIPES_ERROR_MESSAGES['ingredients_not_unique']
             )
         for ingredient in ingredients:
             if int(ingredient['amount']) <= 0:
                 raise serializers.ValidationError(
-                    {'ingredients': 'Поле amount не может быть отрицательным.'}
+                    RECIPES_ERROR_MESSAGES['ingredients_amount_not_positive']
                 )
         return data
 
@@ -181,13 +203,10 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
         return instance
 
     def to_representation(self, instance):
-        if isinstance(instance, Recipe):
-            serializer = RecipeSerializer(
-                instance,
-                context=self.context
-            )
-        else:
-            raise Exception
+        serializer = RecipeSerializer(
+            instance,
+            context=self.context
+        )
         return serializer.data
 
 
@@ -204,13 +223,10 @@ class FavoriteSerializer(serializers.ModelSerializer):
         ]
 
     def to_representation(self, instance):
-        if isinstance(instance, Favorite):
-            serializer = SmallRecipeSerializer(
-                instance.favorite_recipe,
-                context=self.context
-            )
-        else:
-            raise Exception
+        serializer = SmallRecipeSerializer(
+            instance.favorite_recipe,
+            context=self.context
+        )
         return serializer.data
 
 
@@ -227,11 +243,8 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         ]
 
     def to_representation(self, instance):
-        if isinstance(instance, ShoppingCart):
-            serializer = SmallRecipeSerializer(
-                instance.shopping_cart_recipe,
-                context=self.context
-            )
-        else:
-            raise Exception
+        serializer = SmallRecipeSerializer(
+            instance.shopping_cart_recipe,
+            context=self.context
+        )
         return serializer.data

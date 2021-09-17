@@ -1,8 +1,11 @@
+from recipes.models import Recipe
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from users.models import CustomUser, Subscription
 
-from recipes.models import Recipe
-from users.models import CustomUser, Follow
+USERS_ERROR_MESSAGES = {
+    'subscribe_to_yourself': 'Вы не можете подписаться на самого себя!'
+}
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -26,7 +29,7 @@ class UsersSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, instance):
         user = self.context['request'].user
         if user.is_authenticated:
-            return Follow.objects.filter(
+            return Subscription.objects.filter(
                 user=user,
                 author=instance
             ).exists()
@@ -89,10 +92,10 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('__all__')
-        model = Follow
+        model = Subscription
         validators = [
             UniqueTogetherValidator(
-                queryset=Follow.objects.all(),
+                queryset=Subscription.objects.all(),
                 fields=['user', 'author']
             )
         ]
@@ -101,15 +104,12 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
         if self.context['request'].user != data.get('author'):
             return data
         raise serializers.ValidationError(
-            'Вы не можете подписаться на самого себя!'
+            USERS_ERROR_MESSAGES['subscribe_to_yourself']
         )
 
     def to_representation(self, instance):
-        if isinstance(instance, Follow):
-            serializer = RecipeAuthorSerializer(
-                instance.author,
-                context=self.context
-            )
-        else:
-            raise Exception
+        serializer = RecipeAuthorSerializer(
+            instance.author,
+            context=self.context
+        )
         return serializer.data

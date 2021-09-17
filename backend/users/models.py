@@ -40,18 +40,18 @@ class CustomUser(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 
-class Follow(models.Model):
+class Subscription(models.Model):
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        related_name='follower',
-        verbose_name='Follower'
+        related_name='subscriber',
+        verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        related_name='following',
-        verbose_name='Following',
+        related_name='subscribing',
+        verbose_name='Подписавшийся',
         null=True
     )
 

@@ -1,6 +1,6 @@
-from django.core.validators import MinValueValidator
+import webcolors
+from django.core.exceptions import ValidationError
 from django.db import models
-
 from users.models import CustomUser
 
 
@@ -40,10 +40,7 @@ class Recipe(models.Model):
         verbose_name='Тэг',
         blank=True
     )
-    cooking_time = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(1, 'Не меньше 1 мин'),
-        ],
+    cooking_time = models.IntegerField(
         verbose_name='Время приготовления',
         null=False
     )
@@ -95,12 +92,9 @@ class RecipeIngredients(models.Model):
         verbose_name='Ингредиент',
     )
 
-    amount = models.PositiveIntegerField(
-        validators=[
-            MinValueValidator(1, 'Не меньше 1 ед'),
-        ],
+    amount = models.IntegerField(
         verbose_name='Количество ингредиентов',
-        null=True
+        null=False
     )
 
     def __str__(self):
@@ -112,15 +106,26 @@ class RecipeIngredients(models.Model):
 
 
 class Tags(models.Model):
+
+    def valdate_color(value):
+        match = webcolors.HEX_COLOR_RE.match(value)
+        if match is None:
+            raise ValidationError(
+                f'{value} недопустимое шестнадцатеричное значение цвета.',
+                params={'value': value},
+            )
+        return match
+
     name = models.CharField(
         max_length=200,
         verbose_name='Название тэга',
         null=False
     )
-    color = models.TextField(
-        max_length=200,
-        verbose_name='Цвет тэга',
+    color = models.CharField(
+        max_length=7,
+        verbose_name='Цвет тэга в HEX',
         default='#5662f6',
+        validators=[valdate_color],
         null=False
     )
     slug = models.SlugField(
