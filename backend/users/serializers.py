@@ -1,6 +1,7 @@
-from recipes.models import Recipe
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
+from recipes.models import Recipe
 from users.models import CustomUser, Subscription
 
 USERS_ERROR_MESSAGES = {

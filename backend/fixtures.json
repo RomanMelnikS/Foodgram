@@ -2124,7 +2124,7 @@
         "pk": 265,
         "fields": {
             "name": "гастропаб",
-            "measurement_unit": ""
+            "measurement_unit": "г"
         }
     },
     {
@@ -6852,7 +6852,7 @@
         "pk": 856,
         "fields": {
             "name": "лимоны сушеные",
-            "measurement_unit": ""
+            "measurement_unit": "г"
         }
     },
     {
@@ -9412,7 +9412,7 @@
         "pk": 1176,
         "fields": {
             "name": "орехи пекан засахаренные",
-            "measurement_unit": ""
+            "measurement_unit": "г"
         }
     },
     {
@@ -17547,7 +17547,6 @@
             "first_name": "Admin",
             "last_name": "Administrator",
             "email": "ad@ad.ru",
-            "is_staff": true,
             "is_active": true,
             "groups": [],
             "user_permissions": []

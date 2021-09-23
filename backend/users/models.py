@@ -22,8 +22,9 @@ class CustomUser(AbstractUser):
         unique=True
     )
 
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    @property
+    def is_staff(self):
+        return self.is_superuser
 
     def set_password(self, password):
         return super().set_password(password)

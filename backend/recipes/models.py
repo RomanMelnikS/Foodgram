@@ -1,16 +1,31 @@
 import webcolors
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
 from users.models import CustomUser
 
 
 class Recipe(models.Model):
+    tags = models.ManyToManyField(
+        'Tags',
+        related_name='tags',
+        verbose_name='Тэг',
+        blank=True
+    )
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         related_name='author',
         verbose_name='Автор рецепта',
         null=False
+    )
+    ingredients = models.ManyToManyField(
+        'Ingredients',
+        through='RecipeIngredients',
+        related_name='ingredients',
+        verbose_name='Ингредиенты',
+        blank=True
     )
     name = models.CharField(
         max_length=200,
@@ -27,20 +42,11 @@ class Recipe(models.Model):
         verbose_name='Описание рецепта',
         null=False
     )
-    ingredients = models.ManyToManyField(
-        'Ingredients',
-        through='RecipeIngredients',
-        related_name='ingredients',
-        verbose_name='Ингредиенты',
-        blank=True
-    )
-    tags = models.ManyToManyField(
-        'Tags',
-        related_name='tags',
-        verbose_name='Тэг',
-        blank=True
-    )
-    cooking_time = models.IntegerField(
+    cooking_time = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(1, 'Не меньше 1'),
+            MaxValueValidator(999, 'Не больше 999')
+        ],
         verbose_name='Время приготовления',
         null=False
     )
@@ -60,6 +66,40 @@ class Recipe(models.Model):
 
 
 class Ingredients(models.Model):
+
+    MEASUREMENT_UNITS = [
+        ('г', 'грамм'),
+        ('стакан', 'стакан'),
+        ('по вкусу', 'по вкусу'),
+        ('ст. л.', 'столовая ложка'),
+        ('шт.', 'штук'),
+        ('мл', 'миллилитр'),
+        ('ч. л.', 'чайная ложка'),
+        ('капля', 'капля'),
+        ('звездочка', 'звездочка'),
+        ('щепотка', 'щепотка'),
+        ('горсть', 'горсть'),
+        ('кусок', 'кусок'),
+        ('кг', 'килограмм'),
+        ('пакет', 'пакет'),
+        ('пучок', 'пучок'),
+        ('долька', 'долька'),
+        ('банка', 'банка'),
+        ('упаковка', 'упаковка'),
+        ('зубчик', 'зубчик'),
+        ('пласт', 'пласт'),
+        ('пачка', 'пачка'),
+        ('тушка', 'тушка'),
+        ('стручок', 'стручок'),
+        ('веточка', 'веточка'),
+        ('бутылка', 'бутылка'),
+        ('л', 'литр'),
+        ('батон', 'батон'),
+        ('пакетик', 'пакетик'),
+        ('лист', 'лист'),
+        ('стебель', 'стебель')
+    ]
+
     name = models.CharField(
         max_length=200,
         verbose_name='Название ингредиента',
@@ -68,6 +108,7 @@ class Ingredients(models.Model):
     measurement_unit = models.CharField(
         max_length=200,
         verbose_name='Единица измерения',
+        choices=MEASUREMENT_UNITS,
         null=False
     )
 
@@ -92,7 +133,11 @@ class RecipeIngredients(models.Model):
         verbose_name='Ингредиент',
     )
 
-    amount = models.IntegerField(
+    amount = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(1, 'Не меньше 1'),
+            MaxValueValidator(9999, 'Не больше 9999')
+        ],
         verbose_name='Количество ингредиентов',
         null=False
     )
@@ -106,6 +151,29 @@ class RecipeIngredients(models.Model):
 
 
 class Tags(models.Model):
+
+    HEX_COLORS = [
+        ('#00ffff', 'aqua'),
+        ('#000000', 'black'),
+        ('#0000ff', 'blue'),
+        ('#ff00ff', 'fuchsia'),
+        ('#008000', 'green'),
+        ('#808080', 'gray'),
+        ('#00ff00', 'lime'),
+        ('#800000', 'maroon'),
+        ('#000080', 'navy'),
+        ('#808000', 'olive'),
+        ('#800080', 'purple'),
+        ('#ff0000', 'red'),
+        ('#c0c0c0', 'silver'),
+        ('#008080', 'teal'),
+        ('#ffffff', 'white'),
+        ('#ffff00', 'yellow'),
+        ('#ff1493', 'deeppink'),
+        ('#deb887', 'burlywood'),
+        ('#b8860b', 'darkgoldenrod'),
+        ('#4b0082', 'indigo')
+    ]
 
     def valdate_color(value):
         match = webcolors.HEX_COLOR_RE.match(value)
@@ -124,7 +192,7 @@ class Tags(models.Model):
     color = models.CharField(
         max_length=7,
         verbose_name='Цвет тэга в HEX',
-        default='#5662f6',
+        choices=HEX_COLORS,
         validators=[valdate_color],
         null=False
     )

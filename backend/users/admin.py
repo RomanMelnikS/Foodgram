@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from api_foodgram import settings
 from users.models import CustomUser, Subscription
 
 
@@ -12,7 +14,11 @@ class CustomUserAdmin(admin.ModelAdmin):
         'email',
         'password'
     )
-    empty_value_display = '-пусто-'
+    list_filter = (
+        'email',
+        'username'
+    )
+    empty_value_display = settings.DEFAULT_EMPTY_VALUE_DISPLAY
     model = CustomUser
 
 

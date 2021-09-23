@@ -1,26 +1,31 @@
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
-                            ShoppingCart, Tags)
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
+from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
+                            ShoppingCart, Tags)
 from users.serializers import SmallRecipeSerializer, UsersSerializer
 
 RECIPES_ERROR_MESSAGES = {
-    'cooking_time':
-        'Время приготовления не может быть отрицательным.',
+    'cooking_time_not_positive':
+        'Время приготовления не может быть отрицательным или нулём.',
+    'cooking_time_too_big':
+        'Время приготовления слишком большое.',
     'ingredients_is_none':
         'Вы не добавили ингердиенты.',
     'ingredients_not_unique':
         'Вы добавили одинаковые ингердиенты, удалите их.',
     'ingredients_amount_not_positive':
-        'Количество ингредиента не может быть отрицательным.'
+        'Количество ингредиента не может быть отрицательным или нулём.',
+    'ingredients_amount_too_big':
+        'Количество ингредиента слишком большое.'
 }
 
 
 class IngredientsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = '__all__'
+        fields = ('__all__')
         model = Ingredients
 
 
@@ -63,17 +68,17 @@ class RecipeIngredientsCreateSerializer(serializers.ModelSerializer):
 class TagsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = '__all__'
+        fields = ('__all__')
         model = Tags
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    author = UsersSerializer(
-        read_only=True
-    )
     tags = TagsSerializer(
         read_only=True,
         many=True
+    )
+    author = UsersSerializer(
+        read_only=True
     )
     ingredients = RecipeIngredientsSerializer(
         read_only=True,
@@ -84,18 +89,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
-        fields = (
-            'id',
-            'tags',
-            'author',
-            'ingredients',
-            'is_favorited',
-            'is_in_shopping_cart',
-            'name',
-            'image',
-            'text',
-            'cooking_time'
-        )
+        exclude = ('pub_date', )
         model = Recipe
 
     def get_is_favorited(self, instance):
@@ -121,26 +115,22 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
     author = UsersSerializer(read_only=True)
     ingredients = RecipeIngredientsCreateSerializer(many=True)
     image = Base64ImageField()
+    cooking_time = serializers.IntegerField()
 
     class Meta:
+        fields = ('__all__')
         model = Recipe
-        fields = (
-            'id',
-            'tags',
-            'author',
-            'ingredients',
-            'name',
-            'image',
-            'text',
-            'cooking_time'
-        )
 
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
         cooking_time = self.initial_data.get('cooking_time')
         if int(cooking_time) <= 0:
             raise serializers.ValidationError(
-                RECIPES_ERROR_MESSAGES['cooking_time']
+                RECIPES_ERROR_MESSAGES['cooking_time_not_positive']
+            )
+        if int(cooking_time) > 1140:
+            raise serializers.ValidationError(
+                RECIPES_ERROR_MESSAGES['cooking_time_too_big']
             )
         if len(ingredients) == 0:
             raise serializers.ValidationError(
@@ -158,6 +148,10 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
             if int(ingredient['amount']) <= 0:
                 raise serializers.ValidationError(
                     RECIPES_ERROR_MESSAGES['ingredients_amount_not_positive']
+                )
+            if int(ingredient['amount']) > 9999:
+                raise serializers.ValidationError(
+                    RECIPES_ERROR_MESSAGES['ingredients_amount_too_big']
                 )
         return data
 

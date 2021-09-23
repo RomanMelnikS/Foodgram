@@ -1,5 +1,7 @@
 import django_filters as filters
+
 from recipes.models import Ingredients, Recipe, Tags
+from users.models import CustomUser
 
 
 class RecipesFilter(filters.FilterSet):
@@ -16,6 +18,7 @@ class RecipesFilter(filters.FilterSet):
         field_name='shopping_cart_recipe',
         method='get_is_in_shopping_cart'
     )
+    author = filters.ModelChoiceFilter(queryset=CustomUser.objects.all())
 
     def get_is_favorited(self, queryset, name, value):
         if self.request.user.is_authenticated:
@@ -44,7 +47,8 @@ class RecipesFilter(filters.FilterSet):
         fields = (
             'tags',
             'is_favorited',
-            'is_in_shopping_cart'
+            'is_in_shopping_cart',
+            'author'
         )
 
 
