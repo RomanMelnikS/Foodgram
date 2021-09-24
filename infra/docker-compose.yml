@@ -8,9 +8,7 @@ services:
       - ../backend/.env
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: romanmelniks/foodgram_backend
     restart: always
     volumes:
       - static_value:/code/backend_static/
@@ -18,12 +16,10 @@ services:
     depends_on:
       - db
     env_file:
-      - ../backend/.env
+      - ./.env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: romanmelniks/foodgram_frontend
     volumes:
       - frontend_data:/app/build/
     depends_on:
