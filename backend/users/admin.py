@@ -1,5 +1,6 @@
-from api_foodgram import settings
 from django.contrib import admin
+
+from api_foodgram import settings
 from users.models import CustomUser, Subscription
 
 

@@ -1,6 +1,7 @@
-from recipes.models import Recipe
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
+from recipes.models import Recipe
 from users.models import CustomUser, Subscription
 
 USERS_ERROR_MESSAGES = {
@@ -84,8 +85,7 @@ class RecipeAuthorSerializer(UsersSerializer):
         return serializer.data
 
     def get_recipes_count(self, instanse):
-        recipes_count = Recipe.objects.filter(author=instanse).count()
-        return recipes_count
+        return Recipe.objects.filter(author=instanse).count()
 
 
 class SubscriptionsSerializer(serializers.ModelSerializer):

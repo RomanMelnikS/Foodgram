@@ -2,6 +2,7 @@ import webcolors
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
 from users.models import CustomUser
 
 
@@ -174,7 +175,7 @@ class Tags(models.Model):
         ('#4b0082', 'indigo')
     ]
 
-    def valdate_color(value):
+    def valdate_color(self, value):
         match = webcolors.HEX_COLOR_RE.match(value)
         if match is None:
             raise ValidationError(

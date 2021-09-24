@@ -1,6 +1,7 @@
-from api_foodgram import settings
 from django.contrib import admin
 from django.utils.html import format_html
+
+from api_foodgram import settings
 from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
                             ShoppingCart, Tags)
 
