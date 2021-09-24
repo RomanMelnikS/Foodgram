@@ -1,11 +1,10 @@
 from djoser.views import UserViewSet
+from recipes.views import CustomPageNumberPagination
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-from recipes.views import CustomPageNumberPagination
 from users.models import CustomUser, Subscription
 from users.serializers import SubscriptionsSerializer
 
@@ -26,11 +25,11 @@ class UsersViewSet(UserViewSet):
         subscriptions = Subscription.objects.filter(user=user)
         page = self.paginate_queryset(subscriptions)
         serializer = SubscriptionsSerializer(
-                page,
-                many=True,
-                context={
-                    'request': request
-                }
+            page,
+            many=True,
+            context={
+                'request': request
+            }
         )
         return self.get_paginated_response(serializer.data)
 
@@ -67,7 +66,7 @@ class UsersViewSet(UserViewSet):
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
-                )
+            )
         subscription = get_object_or_404(
             Subscription,
             user=user,

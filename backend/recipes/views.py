@@ -1,12 +1,5 @@
 from django.db.models import Sum
 from django.shortcuts import HttpResponse
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
                             ShoppingCart, Tags)
@@ -15,6 +8,12 @@ from recipes.serializers import (CreateOrUpdateRecipeSerializer,
                                  FavoriteSerializer, IngredientsSerializer,
                                  RecipeSerializer, ShoppingCartSerializer,
                                  TagsSerializer)
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 SHOPPING_CART_MSG = 'Вот необходимые для приготовления блюд ингредиенты:'
 

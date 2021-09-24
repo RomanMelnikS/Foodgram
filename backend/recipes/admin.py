@@ -1,7 +1,6 @@
+from api_foodgram import settings
 from django.contrib import admin
 from django.utils.html import format_html
-
-from api_foodgram import settings
 from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
                             ShoppingCart, Tags)
 
@@ -18,14 +17,13 @@ class RecipeIndredientsAdmin(admin.TabularInline):
 class RecipeAdmin(admin.ModelAdmin):
     def count_favorite_recipes(self, obj):
         return Favorite.objects.filter(favorite_recipe=obj).count()
-
     count_favorite_recipes.short_description = 'Число добавлений в избранное'
 
-    def image_tag(self, recipe):
-        if recipe.image:
+    def image_tag(self, obj):
+        if obj.image:
             return format_html(
                 '<img src="{0}" style="max-width: 50%"/>',
-                recipe.image.url
+                obj.image.url
             )
     image_tag.short_description = 'Превью'
 
