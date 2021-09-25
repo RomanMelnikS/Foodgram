@@ -22,11 +22,10 @@ class RecipeAdmin(admin.ModelAdmin):
     count_favorite_recipes.short_description = 'Число добавлений в избранное'
 
     def image_tag(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{0}" style="max-width: 50%"/>',
-                obj.image.url
-            )
+        return format_html(
+            '<img src="{0}" style="max-width: 50%"/>',
+            obj.image.url
+        )
     image_tag.short_description = 'Превью'
 
     readonly_fields = (
