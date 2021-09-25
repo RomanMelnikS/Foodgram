@@ -22,13 +22,6 @@ class CustomUser(AbstractUser):
         unique=True
     )
 
-    @property
-    def is_staff(self):
-        return self.is_superuser
-
-    def set_password(self, password):
-        return super().set_password(password)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 

@@ -17569,6 +17569,7 @@
             "password": "pbkdf2_sha256$260000$01fjDfxhKYx7kTlGd3MecK$eilR8EKwM6TV3iDI55cVtNT73+1jyyaiCQj0obfZOy8=",
             "last_login": null,
             "is_superuser": true,
+            "is_staff": true,
             "username": "Admin",
             "date_joined": "2021-08-25T13:36:14.248Z",
             "first_name": "Admin",

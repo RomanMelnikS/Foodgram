@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from api_foodgram.settings import DEFAULT_EMPTY_VALUE_DISPLAY
-
 from .models import (Favorite, Ingredients, Recipe, RecipeIngredients,
                      ShoppingCart, Tags)
 

@@ -1,19 +1,17 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from api_foodgram.settings import DEFAULT_EMPTY_VALUE_DISPLAY
-
 from .models import CustomUser, Subscription
 
 
 @admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
     list_display = (
-        'pk',
-        'first_name',
-        'last_name',
         'username',
         'email',
-        'password'
+        'first_name',
+        'last_name',
     )
     list_filter = (
         'email',
