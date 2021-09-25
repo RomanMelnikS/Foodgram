@@ -24,10 +24,6 @@ jobs:
   build_and_push_to_docker_hub:
     name: Push to Docker Hub
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: backend
     needs: tests
     steps:
       - name: Check out the repo
@@ -42,8 +38,10 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
+          context: ./backend/
+          file: ./backend/Dockerfile
           push: true
-          tags: romanmelniks/foodgram_backend
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend
 
   deploy:
     name: Deploy
