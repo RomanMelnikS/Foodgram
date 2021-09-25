@@ -1,6 +1,3 @@
-import webcolors
-
-from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -176,15 +173,6 @@ class Tags(models.Model):
         ('#4b0082', 'indigo')
     ]
 
-    def valdate_color(self, value):
-        match = webcolors.HEX_COLOR_RE.match(value)
-        if match is None:
-            raise ValidationError(
-                f'{value} недопустимое шестнадцатеричное значение цвета.',
-                params={'value': value},
-            )
-        return match
-
     name = models.CharField(
         max_length=200,
         verbose_name='Название тэга',
@@ -194,7 +182,6 @@ class Tags(models.Model):
         max_length=7,
         verbose_name='Цвет тэга в HEX',
         choices=HEX_COLORS,
-        validators=[valdate_color],
         null=False
     )
     slug = models.SlugField(
