@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = bool(os.environ['DEBUG'])
+DEBUG = bool(int(os.environ['DEBUG']))
 
 ALLOWED_HOSTS = [os.environ['HOST_NAME'], os.environ['HOST_IP'], 'localhost', 'backend']
 
