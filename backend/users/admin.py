@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from api_foodgram import settings
-from users.models import CustomUser, Subscription
+from api_foodgram.settings import DEFAULT_EMPTY_VALUE_DISPLAY
+
+from .models import CustomUser, Subscription
 
 
 @admin.register(CustomUser)
@@ -18,7 +19,7 @@ class CustomUserAdmin(admin.ModelAdmin):
         'email',
         'username'
     )
-    empty_value_display = settings.DEFAULT_EMPTY_VALUE_DISPLAY
+    empty_value_display = DEFAULT_EMPTY_VALUE_DISPLAY
     model = CustomUser
 
 

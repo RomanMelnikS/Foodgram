@@ -1,17 +1,17 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from users.views import UsersViewSet
+from .views import UsersViewSet
 
-router = DefaultRouter()
+router_v1 = DefaultRouter()
 
-router.register(
+router_v1.register(
     r'users',
     UsersViewSet,
     basename='users'
 )
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', include(router_v1.urls)),
     path('auth/', include('djoser.urls.authtoken'))
 ]
