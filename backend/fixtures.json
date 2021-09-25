@@ -17536,6 +17536,33 @@
         }
     },
     {
+        "model": "recipes.tags",
+        "pk": 1,
+        "fields": {
+            "name": "Завтрак",
+            "color": "#00ffff",
+            "slug": "breakfast"
+        }
+    },
+    {
+        "model": "recipes.tags",
+        "pk": 2,
+        "fields": {
+            "name": "Обед",
+            "color": "#deb887",
+            "slug": "lunch"
+        }
+    },
+    {
+        "model": "recipes.tags",
+        "pk": 3,
+        "fields": {
+            "name": "Ужин",
+            "color": "#000080",
+            "slug": "dinner"
+        }
+    },
+    {
         "model": "users.customuser",
         "pk": 1,
         "fields": {
