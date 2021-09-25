@@ -7,14 +7,13 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from recipes.filters import IngredientsFilter, RecipesFilter
-from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
-                            ShoppingCart, Tags)
-from recipes.permissions import IsAuthor
-from recipes.serializers import (CreateOrUpdateRecipeSerializer,
-                                 FavoriteSerializer, IngredientsSerializer,
-                                 RecipeSerializer, ShoppingCartSerializer,
-                                 TagsSerializer)
+from .filters import IngredientsFilter, RecipesFilter
+from .models import (Favorite, Ingredients, Recipe, RecipeIngredients,
+                     ShoppingCart, Tags)
+from .permissions import IsAuthor
+from .serializers import (CreateOrUpdateRecipeSerializer, FavoriteSerializer,
+                          IngredientsSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, TagsSerializer)
 
 SHOPPING_CART_MSG = 'Вот необходимые для приготовления блюд ингредиенты:'
 

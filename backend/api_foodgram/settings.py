@@ -7,7 +7,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = os.environ['DEBUG'] is True
 
-ALLOWED_HOSTS = os.environ['HOST_NAME']
+ALLOWED_HOSTS = [os.environ['HOST_NAME'], os.environ['HOST_IP'], 'localhost']
 
 INSTALLED_APPS = [
     'recipes',

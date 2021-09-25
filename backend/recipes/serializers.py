@@ -2,9 +2,10 @@ from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
-                            ShoppingCart, Tags)
 from users.serializers import SmallRecipeSerializer, UsersSerializer
+
+from .models import (Favorite, Ingredients, Recipe, RecipeIngredients,
+                     ShoppingCart, Tags)
 
 RECIPES_ERROR_MESSAGES = {
     'cooking_time_not_positive':

@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from api_foodgram import settings
-from recipes.models import (Favorite, Ingredients, Recipe, RecipeIngredients,
-                            ShoppingCart, Tags)
+from api_foodgram.settings import DEFAULT_EMPTY_VALUE_DISPLAY
+
+from .models import (Favorite, Ingredients, Recipe, RecipeIngredients,
+                     ShoppingCart, Tags)
 
 
 class RecipeIndredientsAdmin(admin.TabularInline):
@@ -53,7 +54,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'name',
         'tags'
     )
-    empty_value_display = settings.DEFAULT_EMPTY_VALUE_DISPLAY
+    empty_value_display = DEFAULT_EMPTY_VALUE_DISPLAY
     inlines = [
         RecipeIndredientsAdmin,
     ]

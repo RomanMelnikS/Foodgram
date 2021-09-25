@@ -6,8 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from recipes.views import CustomPageNumberPagination
-from users.models import CustomUser, Subscription
-from users.serializers import SubscriptionsSerializer
+
+from .models import CustomUser, Subscription
+from .serializers import SubscriptionsSerializer
 
 
 class UsersViewSet(UserViewSet):
