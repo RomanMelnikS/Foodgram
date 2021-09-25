@@ -1,5 +1,4 @@
 import django_filters as filters
-
 from users.models import CustomUser
 
 from .models import Ingredients, Recipe, Tags

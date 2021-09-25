@@ -5,7 +5,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ../backend/.env
+      - ./.env
 
   backend:
     image: romanmelniks/foodgram_backend
