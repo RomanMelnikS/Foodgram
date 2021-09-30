@@ -9,12 +9,16 @@ from .models import (Favorite, Ingredients, Recipe, RecipeIngredients,
 RECIPES_ERROR_MESSAGES = {
     'cooking_time_not_positive':
         'Время приготовления не может быть отрицательным или нулём.',
+    'cooking_time_not_integer':
+        'Время приготовления не может быть буквой или символом.',
     'cooking_time_too_big':
         'Время приготовления слишком большое.',
     'ingredients_is_none':
         'Вы не добавили ингердиенты.',
     'ingredients_not_unique':
         'Вы добавили одинаковые ингердиенты, удалите их.',
+    'ingredients_amount_not_integer':
+        'Количество ингредиента не может быть буквой или символом.',
     'ingredients_amount_not_positive':
         'Количество ингредиента не может быть отрицательным или нулём.',
     'ingredients_amount_too_big':
@@ -124,6 +128,10 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
         cooking_time = self.initial_data.get('cooking_time')
+        if cooking_time is not int():
+            raise serializers.ValidationError(
+                RECIPES_ERROR_MESSAGES['cooking_time_not_integer']
+            )
         if int(cooking_time) <= 0:
             raise serializers.ValidationError(
                 RECIPES_ERROR_MESSAGES['cooking_time_not_positive']
@@ -145,6 +153,10 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
                 RECIPES_ERROR_MESSAGES['ingredients_not_unique']
             )
         for ingredient in ingredients:
+            if ingredient['amount'] is not int():
+                raise serializers.ValidationError(
+                    RECIPES_ERROR_MESSAGES['ingredients_amount_not_integer']
+                )
             if int(ingredient['amount']) <= 0:
                 raise serializers.ValidationError(
                     RECIPES_ERROR_MESSAGES['ingredients_amount_not_positive']
