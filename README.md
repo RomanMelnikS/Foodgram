@@ -1,4 +1,4 @@
-![Foodgram](https://github.com/RomanMelnikS/foodgram-project-react/actions/workflows/main.yml/badge.svg)
+![Foodgram](https://github.com/RomanMelnikS/Foodgram/actions/workflows/main.yml/badge.svg)
 
 Foodgram, «Продуктовый помощник».
 На этом сервисе пользователи смогут публиковать рецепты, подписываться на публикации других пользователей,
@@ -6,15 +6,14 @@ Foodgram, «Продуктовый помощник».
 необходимых для приготовления одного или нескольких выбранных блюд.
 
 Локальный запуск проекта:
-
 - Откройте терминал и перейдите в ту директорию, в которой будет располагаться проект.
-- Выполните комманду git clone https://github.com/RomanMelnikS/foodgram-project-react.git и дождитесь окончания загрузки проекта из
+- Выполните команду git clone https://github.com/RomanMelnikS/Foodgram.git и дождитесь окончания загрузки проекта из
 GitHub.
 - Перейдите в корневую директорию проекта создайте виртуальное и активируйте виртуальное окружение:
     - python -m venv 'venv'
     - source venv/Scripts/activate
 - В директории backend/, создайте .env файл со следующими переменными:
-    - DB_ENGINE - Ядро базы данных( в проекте используется Postgres)
+    - DB_ENGINE - Ядро базы данных(в проекте используется Postgres)
     - DB_NAME - Имя базы данных
     - POSTGRES_USER - Логин для поключения к базе данных
     - POSTGRES_PASSWORD - Пароль для подключения к базе данных
