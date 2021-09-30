@@ -128,7 +128,7 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
         cooking_time = self.initial_data.get('cooking_time')
-        if cooking_time is not int():
+        if not int(cooking_time):
             raise serializers.ValidationError(
                 RECIPES_ERROR_MESSAGES['cooking_time_not_integer']
             )
@@ -153,7 +153,7 @@ class CreateOrUpdateRecipeSerializer(serializers.ModelSerializer):
                 RECIPES_ERROR_MESSAGES['ingredients_not_unique']
             )
         for ingredient in ingredients:
-            if ingredient['amount'] is not int():
+            if not int(ingredient['amount']):
                 raise serializers.ValidationError(
                     RECIPES_ERROR_MESSAGES['ingredients_amount_not_integer']
                 )
